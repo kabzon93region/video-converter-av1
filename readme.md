@@ -22,11 +22,11 @@
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/yourusername/yourrepository.git
+   git clone https://github.com/kabzon93region/video-converter-av1.git
    ```
 2. Перейдите в директорию проекта:
    ```bash
-   cd yourrepository
+   cd video-converter-av1
    ```
 3. Установите зависимости:
    ```bash
@@ -56,7 +56,7 @@ pyinstaller --onefile --windowed --noconsole vo.py
 
 ## Вклад и Разработка
 
-Если вы хотите внести свой вклад, создайте форк репозитория, внесите изменения и отправьте pull request. Для сообщений об ошибках используйте раздел [Issues](https://github.com/yourusername/yourrepository/issues).
+Если вы хотите внести свой вклад, создайте форк репозитория, внесите изменения и отправьте pull request. Для сообщений об ошибках используйте раздел [Issues](https://github.com/kabzon93region/video-converter-av1/issues).
 
 ## Лицензия
 
