@@ -322,10 +322,12 @@ def start_conversion_thread(folder, preset, crf, height_filter, should_delete_so
         logger.info("Конвертация остановлена пользователем во время фильтрации файлов.")
         root.after(0, enable_settings)
         root.after(0, finalize_failed_deletions_file)
+        root.after(0, lambda: stop_button.config(state="disabled", bg="#3c3c3c"))
         return
     
     root.after(0, enable_settings)  # Восстановление активности элементов интерфейса после завершения конвертации
     root.after(0, finalize_failed_deletions_file)  # Вызов функции завершения файла failed_deletions.cmd
+    root.after(0, lambda: stop_button.config(state="disabled", bg="#3c3c3c"))
 
 
 def browse_folder():  # Функция для выбора папки с видеофайлами через диалоговое окно
@@ -359,6 +361,7 @@ def start_conversion_gui():  # Функция, вызываемая при на�
     status_label.config(text="Запуск конвертации...")  # Обновление метки статуса, информируя пользователя о начале процесса
     
     disable_settings()  # Отключение элементов интерфейса для предотвращения изменений во время конвертации
+    stop_button.config(state="normal", bg="#0e639c")
     
     global conversion_start_time, conversion_finished  # Объявление глобальных переменных для времени начала и статуса конвертации
     conversion_start_time = time.time()  # Фиксация текущего времени как начала конвертации
@@ -407,6 +410,7 @@ def stop_conversion():  # Функция для остановки запуще�
     files_count_label.config(text="Количество файлов: N/A")
     root.after(0, enable_settings)  # Включение элементов интерфейса после остановки конвертации
     root.after(0, finalize_failed_deletions_file)  # Вызов функции завершения файла failed_deletions.cmd
+    stop_button.config(state="disabled", bg="#3c3c3c")
 
 
 def update_timer():  # Функция обновления таймера, показывающая время, прошедшее с начала конвертации
@@ -464,13 +468,7 @@ root.configure(bg="#1e1e1e")  # Установка темного фона дл�
 
 style = ttk.Style(root)  # Создание объекта стиля для ttk виджетов
 style.theme_use("clam")  # Применение темы "clam" для ttk виджетов
-
-# Настройка виджетов ttk в темной палитре
-style.configure("TLabel", background="#1e1e1e", foreground="#d4d4d4")  # Настройка меток: темный фон и светлый текст
-style.configure("TButton", background="#0e639c", foreground="#ffffff", relief="flat")  # Настройка кнопок с синим фоном, белым текстом и плоским стилем
-style.map("TButton", background=[("active", "#1177bb"), ("disabled", "#3c3c3c")], foreground=[("disabled", "#666666")])  # Настройка цветов кнопок в активном и неактивном состояниях
-style.configure("TEntry", fieldbackground="#3c3c3c", foreground="#d4d4d4")  # Настройка полей ввода: темное поле и светлый текст
-style.configure("TCheckbutton", background="#1e1e1e", foreground="#d4d4d4")  # Настройка чекбоксов: темный фон и светлый текст
+style.configure("Horizontal.TProgressbar", troughcolor="#bab5ab", background="#0e639c")  # Настройка прогрессбара: серый фон, синий индикатор
 
 # Поле для ввода папки с видео
 tk.Label(root, text="Папка с видео:", bg="#1e1e1e", fg="#d4d4d4").grid(row=0, column=0, padx=5, pady=5, sticky="w")  # Создание и размещение метки для поля ввода папки с видео
@@ -511,7 +509,7 @@ description_label.grid(row=3, column=0, columnspan=4, padx=5, pady=5, sticky="w"
 start_button = tk.Button(root, text="Запустить конвертацию", command=start_conversion_gui, bg="#0e639c", fg="#ffffff", activebackground="#1177bb", activeforeground="#ffffff")  # Создание кнопки запуска конвертации
 start_button.grid(row=4, column=0, padx=5, pady=5, sticky="w")  # Размещение кнопки запуска на сетке
 
-stop_button = tk.Button(root, text="Отменить конвертацию", command=stop_conversion, bg="#0e639c", fg="#ffffff", activebackground="#1177bb", activeforeground="#ffffff")  # Создание кнопки для остановки конвертации
+stop_button = tk.Button(root, text="Отменить конвертацию", command=stop_conversion, bg="#3c3c3c", fg="#ffffff", activebackground="#1177bb", activeforeground="#ffffff", state="disabled")  # Создание кнопки для остановки конвертации
 stop_button.grid(row=4, column=1, padx=5, pady=5, sticky="w")  # Размещение кнопки остановки на сетке
 
 files_count_label = tk.Label(root, text="Количество файлов: N/A", anchor="w", bg="#1e1e1e", fg="#d4d4d4")  # Создание метки для отображения количества файлов для конвертации
