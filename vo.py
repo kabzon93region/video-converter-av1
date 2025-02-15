@@ -46,7 +46,19 @@ def get_video_height(file_path):  # Функция для получения в�
 
 
 def update_estimated_time_label(time_sec):  # Функция обновления метки с оценочным временем конвертации
-    estimated_time_label.config(text=f"Оценочное время: {time_sec} сек")  # Обновление текста метки с выводом оценочного времени в секундах
+    total_seconds = int(time_sec)
+    if total_seconds < 60:
+        display = f"{total_seconds}с"
+    elif total_seconds < 3600:
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        display = f"{minutes:02d} м {seconds:02d} с"
+    else:
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+        display = f"{hours:02d}ч {minutes:02d}м {seconds:02d}с"
+    estimated_time_label.config(text=f"Оценочное время: {display}")
 
 
 def get_total_frames(file_path):  # Функция для получения общего количества кадров в видеофайле через ffprobe
@@ -414,9 +426,20 @@ def stop_conversion():  # Функция для остановки запуще�
 
 
 def update_timer():  # Функция обновления таймера, показывающая время, прошедшее с начала конвертации
-    global conversion_start_time, conversion_finished, timer_id  # Объявление глобальных переменных для времени старта и статуса конвертации
     elapsed = time.time() - conversion_start_time  # Вычисление прошедшего времени с момента старта конвертации
-    timer_label.config(text=f"Время конвертации: {elapsed:.1f} сек")  # Обновление метки таймера с отображением прошедшего времени
+    total_seconds = int(elapsed)
+    if total_seconds < 60:
+        display = f"{total_seconds}с"
+    elif total_seconds < 3600:
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        display = f"{minutes:02d} м {seconds:02d} с"
+    else:
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+        display = f"{hours:02d}ч {minutes:02d}м {seconds:02d}с"
+    timer_label.config(text=f"Время конвертации: {display}")
     if not conversion_finished:  # Если конвертация еще не завершена
         timer_id = root.after(100, update_timer)  # Планирование обновления функции через 100 миллисекунд
 
