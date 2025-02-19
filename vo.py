@@ -106,8 +106,16 @@ def convert_file(file_path, preset, crf, should_delete_source):  # Функци�
     def fetch_total_frames():  # Функция, запускаемая в отдельном потоке для получения числа кадров
         nonlocal ffprobe_process, ffprobe_pid  # Объявление переменных ffprobe_process и ffprobe_pid
         try:
-            cmd_ffprobe = f'ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 "{file_path}"'
-            ffprobe_process = subprocess.Popen(cmd_ffprobe, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            cmd_ffprobe = [
+                'ffprobe',
+                '-v', 'error',
+                '-count_frames',
+                '-select_streams', 'v:0',
+                '-show_entries', 'stream=nb_read_frames',
+                '-of', 'default=nokey=1:noprint_wrappers=1',
+                file_path
+            ]
+            ffprobe_process = subprocess.Popen(cmd_ffprobe, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, creationflags=subprocess.CREATE_NO_WINDOW)
             ffprobe_pid = ffprobe_process.pid  # Сохраняем идентификатор процесса ffprobe для последующего завершения
             logger.info(f"Запущен процесс ffprobe с PID {ffprobe_pid}")
             # Ожидаем завершения процесса ffprobe и получаем его стандартный вывод и ошибки
@@ -138,7 +146,7 @@ def convert_file(file_path, preset, crf, should_delete_source):  # Функци�
     logger.debug(f"Команда конвертации: {' '.join(cmd)}")  # Логирование сформированной команды для отладки
     try:
         global current_conversion_process, current_output_file  # Объявление глобальных переменных для хранения текущего процесса и выходного файла
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_lines=True, creationflags=subprocess.CREATE_NO_WINDOW)  # Запуск процесса ffmpeg для конвертации без создания окна консоли
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, creationflags=subprocess.CREATE_NO_WINDOW)  # Запуск процесса ffmpeg для конвертации без создания окна консоли
         current_conversion_process = process  # Сохранение запущенного процесса в глобальной переменной
         current_output_file = output_file  # Сохранение имени выходного файла в глобальной переменной
         ffmpeg_output = []  # Инициализация списка для накопления строк вывода процесса ffmpeg
@@ -386,13 +394,16 @@ def start_conversion_gui():  # Функция, вызываемая при на�
     except ValueError:
         messagebox.showerror("Ошибка", "Параметры конвертации и фильтра должны быть целыми числами.")  # Отображение сообщения об ошибке, если преобразование не удалось
         return  # Завершение функции при ошибке преобразования
+    
+    global stop_requested, conversion_start_time, conversion_finished  # Добавляем глобальные переменные
+    stop_requested = False  # Сбрасываем флаг остановки, чтобы можно было запустить конвертацию заново
+
     should_delete_source = delete_var.get()  # Получение логического значения из чекбокса удаления исходных файлов
     status_label.config(text="Запуск конвертации...")  # Обновление метки статуса, информируя пользователя о начале процесса
     
     disable_settings()  # Отключение элементов интерфейса для предотвращения изменений во время конвертации
     stop_button.config(state="normal", bg="#0e639c")
     
-    global conversion_start_time, conversion_finished  # Объявление глобальных переменных для времени начала и статуса конвертации
     conversion_start_time = time.time()  # Фиксация текущего времени как начала конвертации
     conversion_finished = False  # Сброс флага завершения конвертации для начала процесса
     root.after(0, update_timer)  # Запуск функции обновления таймера конвертации
