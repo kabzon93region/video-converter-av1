@@ -7,19 +7,27 @@ if %ERRORLEVEL%==0 (
     goto end
 )
 echo ffmpeg не найден. 
-echo Скачайте ffmpeg для windows. Перенесите архив ffmpeg в текущую папку. Переименуйте архив ffmpeg в ffmpeg.zip и нажмите любую клавишу для снятия паузы и продолжения установки ffmpeg из вашего архива.
+echo Скачайте ffmpeg для windows. Перенесите архив ffmpeg в текущую папку. Переименуйте архив ffmpeg в ffmpeg.zip и нажмите любую клавишу для снятия паузы и продолжения установки ffmpeg из вашего архива. 
+echo (если скачали с гитхаба архив для винды, то в нем есть подходящий архив с ffmpeg.zip).
+echo.
 pause
-
+echo.
 echo Создаем директорию C:\ffmpeg, если её нет.
 if not exist "C:\ffmpeg" mkdir "C:\ffmpeg"
-
 echo Распаковываем архив ffmpeg.zip в C:\ffmpeg с помощью PowerShell.
 powershell -Command "Expand-Archive -Force -Path 'ffmpeg.zip' -DestinationPath 'C:\ffmpeg'"
-
 echo Добавляем C:\ffmpeg\bin в PATH для текущей сессии и навсегда.
 set PATH=C:\ffmpeg\bin;%PATH%
 setx PATH "C:\ffmpeg\bin;%PATH%"
-
 echo ffmpeg успешно установлен и PATH обновлен.
 :end
+
+echo.
+echo Установка requirements
+pip install -r requirements.txt
+echo.
+echo Готово. Запускаем программу.
+python vo.py
+ehco.
+ehco Программа завершилась.
 pause
