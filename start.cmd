@@ -3,18 +3,18 @@
 setlocal enabledelayedexpansion
 set "PYTHONUTF8=1"
 
-REM --- каталог скрипта ---
+REM --- Script directory ---
 pushd "%~dp0"
  
-REM --- виртуальное окружение ---
+REM --- Virtual environment ---
 set "VENV_DIR=%~dp0vo_venv"
 if not exist "%VENV_DIR%\Scripts\python.exe" (
     python -m venv "%VENV_DIR%"
 )
 call "%VENV_DIR%\Scripts\activate"
 
-echo Готово. Запускаем программу.
+echo Done. Starting program.
 python vo.py
 
-echo Программа завершилась.
+echo Program finished.
 pause

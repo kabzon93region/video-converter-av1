@@ -1,24 +1,24 @@
 @chcp 65001
 @echo off
 @cls
-echo Скрипт для сборки exe-файла из Python-программы с использованием PyInstaller
-echo Устанавливаем PyInstaller (если еще не установлен)
+echo Script to build an executable from a Python program using PyInstaller
+echo Installing PyInstaller (if not already installed)
 pip install pyinstaller
  
 @cls
-echo Скрипт для сборки exe-файла из Python-программы с использованием PyInstaller
-echo OK - Устанавливаем PyInstaller (если еще не установлен)
-echo Очистка предыдущих сборок
+echo Script to build an executable from a Python program using PyInstaller
+echo OK - Installing PyInstaller (if not already installed)
+echo Cleaning up previous builds
 if exist build rmdir /s /q build
 if exist dist rmdir /s /q dist
 if exist vo.spec del vo.spec
 
 @cls
-echo Скрипт для сборки exe-файла из Python-программы с использованием PyInstaller
-echo OK - Устанавливаем PyInstaller (если еще не установлен)
-echo OK - Очистка предыдущих сборок
-echo Сборка exe-файла (флаг --windowed для GUI-приложения, --onefile объединяет все в один файл)
+echo Script to build an executable from a Python program using PyInstaller
+echo OK - Installing PyInstaller (if not already installed)
+echo OK - Cleaning up previous builds
+echo Building executable ( --windowed for GUI app, --onefile combines everything into one file)
 pyinstaller --onefile --windowed --noconsole vo.py
 
-echo !_Готово_! =<^_^>=
+echo !_Done_! =<^_^>=
 pause

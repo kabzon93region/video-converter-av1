@@ -3,40 +3,40 @@
 setlocal enabledelayedexpansion
 set "PYTHONUTF8=1" 
 
-REM --- каталог скрипта ---
+REM --- Script directory ---
 pushd "%~dp0"
 
-REM --- виртуальное окружение ---
+REM --- Virtual environment ---
 set "VENV_DIR=%~dp0vo_venv"
 if not exist "%VENV_DIR%\Scripts\python.exe" (
     python -m venv "%VENV_DIR%"
 )
 call "%VENV_DIR%\Scripts\activate"
 
-echo Проверка наличия ffmpeg
+echo Checking for ffmpeg
 where ffmpeg >nul 2>&1
 if %ERRORLEVEL%==0 (
-    echo ffmpeg обнаружен.
+    echo ffmpeg detected.
     goto end
 )
-echo ffmpeg не найден. 
-echo Скачайте ffmpeg для windows. Перенесите архив ffmpeg в текущую папку. Переименуйте архив ffmpeg в ffmpeg.zip и нажмите любую клавишу для снятия паузы и продолжения установки ffmpeg из вашего архива. 
-echo (если скачали с гитхаба архив для винды, то в нем есть подходящий архив с ffmpeg.zip).
+echo ffmpeg not found.
+echo Download ffmpeg for windows. Move the ffmpeg archive to the current folder. Rename the ffmpeg archive to ffmpeg.zip and press any key to unpause and continue installing ffmpeg from your archive.
+echo (If you downloaded the Windows archive from GitHub, it contains a suitable ffmpeg.zip archive).
 
 pause
 
-echo Создаем директорию C:\ffmpeg, если её нет.
+echo Creating C:\ffmpeg directory if it doesn't exist.
 if not exist "C:\ffmpeg" mkdir "C:\ffmpeg"
-echo Распаковываем архив ffmpeg.zip в C:\ffmpeg с помощью PowerShell.
+echo Unpacking ffmpeg.zip to C:\ffmpeg using PowerShell.
 powershell -Command "Expand-Archive -Force -Path 'ffmpeg.zip' -DestinationPath 'C:\ffmpeg'"
-echo Добавляем C:\ffmpeg\bin в PATH для текущей сессии и навсегда.
+echo Adding C:\ffmpeg\bin to PATH for current session and permanently.
 set PATH=C:\ffmpeg\bin;%PATH%
 setx PATH "C:\ffmpeg\bin;%PATH%"
-echo ffmpeg успешно установлен и PATH обновлен.
+echo ffmpeg successfully installed and PATH updated.
 :end
 
 
-echo Установка requirements
+echo Installing requirements
 python -m pip install --upgrade pip setuptools wheel
 python -m pip check
 python -m pip cache purge
@@ -46,8 +46,8 @@ python -m pip check
 python -m pip cache purge
 python -m pip check
 
-echo Готово. Запускаем программу.
+echo Done. Starting program.
 python vo.py
 
-echo Программа завершилась.
+echo Program finished.
 pause
