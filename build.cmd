@@ -4,7 +4,7 @@ chcp 65001
 echo Скрипт для сборки exe-файла из Python-программы с использованием PyInstaller
 echo Устанавливаем PyInstaller (если еще не установлен)
 pip install pyinstaller
-
+ 
 @cls
 echo Скрипт для сборки exe-файла из Python-программы с использованием PyInstaller
 echo OK - Устанавливаем PyInstaller (если еще не установлен)

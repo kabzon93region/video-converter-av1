@@ -1,7 +1,7 @@
 @echo off
 @chcp 65001
 setlocal enabledelayedexpansion
-set "PYTHONUTF8=1"
+set "PYTHONUTF8=1" 
 
 REM --- каталог скрипта ---
 pushd "%~dp0"

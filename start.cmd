@@ -5,7 +5,7 @@ set "PYTHONUTF8=1"
 
 REM --- каталог скрипта ---
 pushd "%~dp0"
-
+ 
 REM --- виртуальное окружение ---
 set "VENV_DIR=%~dp0vo_venv"
 if not exist "%VENV_DIR%\Scripts\python.exe" (
